@@ -45,11 +45,22 @@ zss_editor.init = function() {
                                 $('img').removeClass('zs_active');
                                 }
                                 });
-    
+    var flagContentChange = false;
+    var interval = setInterval(function(e) {
+                               //如果文章内容发生了改变，并且过去一段时间500豪秒，则触发change
+                               if (flagContentChange) {
+                               zss_editor.calculateEditorHeightWithCaretPosition();
+                               zss_editor.setScrollPosition();
+                               zss_editor.enabledEditingItems(e);
+                               }
+                               // 重新统计这500豪秒内编辑器内容是否发生了改变
+                               flagContentChange = false;
+                               }, 500);
     $(document).on('selectionchange',function(e){
-                   zss_editor.calculateEditorHeightWithCaretPosition();
-                   zss_editor.setScrollPosition();
-                   zss_editor.enabledEditingItems(e);
+                   flagContentChange = true;
+//                   zss_editor.calculateEditorHeightWithCaretPosition();
+//                   zss_editor.setScrollPosition();
+//                   zss_editor.enabledEditingItems(e);
                    });
     
     $(window).on('scroll', function(e) {
